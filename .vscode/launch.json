@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WineManagerApp<wine-manager>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.tus.winemanager.WineManagerApp",
+            "projectName": "wine-manager",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
