@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        SHELL = 'C:/Program Files/Git/bin/sh.exe'
-    }
 
     tools {
         maven 'maven' // Use the Maven tool installed in Jenkins
@@ -17,13 +14,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat  'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat  'mvn test'
             }
         }
 
