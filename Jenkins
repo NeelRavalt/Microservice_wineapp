@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven' // Use the Maven tool installed in Jenkins
+        maven 'maven' //Use the Maven tool installed in Jenkins
     }
 
     stages {
@@ -14,19 +14,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat  'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                bat  'mvn test'
+                bat 'docker build -t wineapp:latest .' // Build the Docker image
             }
         }
 
-        stage('Deploy') {
+        stage('Push to Docker Hub') {
             steps {
-                echo "Deploying the Java application..."
+                // Tag and push the Docker image to your public Docker Hub repository
+                bat 'docker tag wineapp:latest nraval/wineapp:latest' // Tag the image
+                bat 'docker push nraval/wineapp:latest' // Push the image to Docker Hub
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                bat 'kubectl apply -f k8s/deployment.yaml' // Deploy to Kubernetes
             }
         }
     }
