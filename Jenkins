@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven' //Use the Maven tool installed in Jenkins
+        maven 'maven' // Use the Maven tool installed in Jenkins
     }
-     environment {
+
+    environment {
         DOCKER_CREDENTIALS_ID = 'dckr_pat_jQIXljM22NFd_GKzqTJrsWkUNtU'  // ID of the Jenkins credential for Docker Hub token
     }
 
@@ -29,7 +30,7 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-               script {
+                script {
                     // Use Jenkins Credentials to securely log in to Docker Hub
                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'DOCKER_TOKEN')]) {
                         bat """
@@ -37,7 +38,8 @@ pipeline {
                             docker tag wineapp:latest nraval/wineapp:latest  // Tag the image
                             docker push nraval/wineapp:latest  // Push the image to Docker Hub
                         """
-                 }
+                    }
+                }
             }
         }
 
