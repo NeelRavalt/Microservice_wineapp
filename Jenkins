@@ -5,6 +5,10 @@ pipeline {
         maven 'maven' // Use the Maven tool installed in Jenkins
     }
 
+    environment {
+        DOCKER_CREDENTIALS_ID = 'dckr_pat_jQIXljM22NFd_GKzqTJrsWkUNtU'  // ID of the Jenkins credential for Docker Hub token
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -14,19 +18,34 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat  'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                bat  'mvn test'
+                bat 'docker build -t wineapp:latest .' // Build the Docker image
             }
         }
 
-        stage('Deploy') {
+        stage('Push to Docker Hub') {
             steps {
-                echo "Deploying the Java application..."
+                script {
+                    // Use Jenkins Credentials to securely log in to Docker Hub
+                    withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'DOCKER_TOKEN')]) {
+                        bat """
+                            echo %DOCKER_TOKEN% | docker login -u nraval --password-stdin
+                            docker tag wineapp:latest nraval/wineapp:latest  // Tag the image
+                            docker push nraval/wineapp:latest  // Push the image to Docker Hub
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                bat 'kubectl apply -f k8s/deployment.yaml' // Deploy to Kubernetes
             }
         }
     }
