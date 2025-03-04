@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     // Use Jenkins Credentials to securely log in to Docker Hub
-                    withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'DOCKER_TOKEN')]) {
+                    withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID)]) {
                         bat """
                             echo %DOCKER_TOKEN% | docker login -u nraval --password-stdin
                             docker tag wineapp:latest nraval/wineapp:latest  // Tag the image
