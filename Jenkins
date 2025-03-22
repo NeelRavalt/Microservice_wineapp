@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dckr_pat_jQIXljM22NFd_GKzqTJrsWkUNtU' // ID of the Jenkins credential for Docker Hub token
-        SONAR_TOKEN = credentials('sqa_edc2a37056e91b7760cf7a2bcb9af71117ee6f85') // Use the ID of your SonarQube token credential
+        DOCKER_CREDENTIALS_ID = 'docker-hub-token' // ID of the Jenkins credential for Docker Hub token
+        SONAR_TOKEN = credentials('SonarQube-token') // Use the ID of your SonarQube token credential
     }
 
     stages {
