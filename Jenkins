@@ -6,7 +6,8 @@ pipeline {
     }
 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dckr_pat_jQIXljM22NFd_GKzqTJrsWkUNtU'  // ID of the Jenkins credential for Docker Hub token
+        DOCKER_CREDENTIALS_ID = 'dckr_pat_jQIXljM22NFd_GKzqTJrsWkUNtU' // ID of the Jenkins credential for Docker Hub token
+        SONAR_TOKEN = credentials('sqa_edc2a37056e91b7760cf7a2bcb9af71117ee6f85') // Use the ID of your SonarQube token credential
     }
 
     stages {
@@ -19,6 +20,21 @@ pipeline {
         stage('Build') {
             steps {
                 bat 'mvn clean package'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run SonarQube analysis
+                    withSonarQubeEnv('SonarQube') { // Make sure 'SonarQube' matches the name configured in Jenkins
+                        bat """
+                            mvn sonar:sonar -Dsonar.projectKey=your_project_key \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=${SONAR_TOKEN}
+                        """
+                    }
+                }
             }
         }
 
@@ -35,8 +51,8 @@ pipeline {
                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID)]) {
                         bat """
                             echo %DOCKER_TOKEN% | docker login -u nraval --password-stdin
-                            docker tag wineapp:latest nraval/wineapp:latest  // Tag the image
-                            docker push nraval/wineapp:latest  // Push the image to Docker Hub
+                            docker tag wineapp:latest nraval/wineapp:latest // Tag the image
+                            docker push nraval/wineapp:latest // Push the image to Docker Hub
                         """
                     }
                 }
