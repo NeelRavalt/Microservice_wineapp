@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Run SonarQube analysis
-                    withSonarQubeEnv('SonarQube') { // Make sure 'SonarQube' matches the name configured in Jenkins
+                    withSonarQubeEnv('sonarqube-token') { // Make sure 'SonarQube' matches the name configured in Jenkins
                         bat """
                             mvn sonar:sonar -Dsonar.projectKey=your_project_key \
                             -Dsonar.host.url=http://localhost:9000 \
