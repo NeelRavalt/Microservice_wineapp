@@ -29,9 +29,10 @@ pipeline {
                     // Run SonarQube analysis
                     withSonarQubeEnv('SonarQube') { // Make sure 'SonarQube' matches the name configured in Jenkins
                         bat """
-                            mvn sonar:sonar -Dsonar.projectKey=your_project_key \
+                            mvn sonar:sonar -Dsonar.projectKey=wine-application \
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.login=${SONAR_TOKEN}
+
                         """
                     }
                 }
