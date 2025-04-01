@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-hub-token' // ID of the Jenkins credential for Docker Hub token
         SONAR_TOKEN = credentials('sonarqube-token') // Use the ID of your SonarQube token credential
-    }
+    }                            
 
     stages {
         stage('Checkout Code') {
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Run SonarQube analysis
-                    withSonarQubeEnv('sonarqube-token') { // Make sure 'SonarQube' matches the name configured in Jenkins
+                    withSonarQubeEnv('SonarQube') { // Make sure 'SonarQube' matches the name configured in Jenkins
                         bat """
                             mvn sonar:sonar -Dsonar.projectKey=your_project_key \
                             -Dsonar.host.url=http://localhost:9000 \
