@@ -26,7 +26,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') { // Name from Jenkins config
+                withSonarQubeEnv('WineApp') { // Name from Jenkins config
                     sh '''
                         mvn sonar:sonar \
                           -Dsonar.projectKey=Microservice_wineapp \
